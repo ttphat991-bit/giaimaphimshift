@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Giải Mã Phím Shift → Số</title>
+
+<style>
+body{
+  margin:0;
+  font-family: system-ui, sans-serif;
+  background: linear-gradient(135deg,#1e1e2f,#2b2b4a);
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+}
+
+.container{
+  background:#2f2f55;
+  padding:25px;
+  border-radius:15px;
+  width:320px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.4);
+}
+
+h2{
+  margin-top:0;
+  text-align:center;
+}
+
+input{
+  width:100%;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  margin-bottom:10px;
+  font-size:16px;
+}
+
+button{
+  width:100%;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  background:#4CAF50;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+  margin-top:5px;
+}
+
+button:hover{
+  opacity:0.9;
+}
+
+.copy-btn{
+  background:#2196F3;
+}
+
+.result{
+  margin-top:15px;
+  padding:10px;
+  background:#1e1e2f;
+  border-radius:8px;
+  text-align:center;
+  font-size:18px;
+  word-break:break-all;
+}
+
+.toast{
+  position:fixed;
+  bottom:60px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#000;
+  padding:10px 15px;
+  border-radius:8px;
+  opacity:0;
+  transition:0.3s;
+}
+
+.toast.show{
+  opacity:1;
+}
+
+footer{
+  margin-top:20px;
+  font-size:14px;
+  color:#aaa;
+  text-align:center;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>🔐 Giải Mã Phím Shift</h2>
+
+  <input id="input" placeholder="Nhập chuỗi..." />
+
+  <button onclick="decode()">Giải mã → Số</button>
+  <button onclick="encode()">Mã hóa → Ký tự</button>
+  <button class="copy-btn" onclick="copyResult()">📋 Copy kết quả</button>
+
+  <div class="result" id="output">Kết quả...</div>
+</div>
+
+<footer>
+  © 2026 · Made by Trần Thành Phát
+</footer>
+
+<div class="toast" id="toast">Đã copy!</div>
+
+<script>
+const encodeMap = {
+  '0': ')',
+  '1': '!',
+  '2': '@',
+  '3': '#',
+  '4': '$',
+  '5': '%',
+  '6': '^',
+  '7': '&',
+  '8': '*',
+  '9': '('
+};
+
+const decodeMap = Object.fromEntries(
+  Object.entries(encodeMap).map(([k, v]) => [v, k])
+);
+
+function decode(){
+  const input = document.getElementById("input").value;
+  const result = input.split('').map(c => decodeMap[c] || c).join('');
+  document.getElementById("output").innerText = result;
+}
+
+function encode(){
+  const input = document.getElementById("input").value;
+  const result = input.split('').map(c => encodeMap[c] || c).join('');
+  document.getElementById("output").innerText = result;
+}
+
+function copyResult(){
+  const text = document.getElementById("output").innerText;
+  if(!text || text === "Kết quả...") return;
+
+  navigator.clipboard.writeText(text).then(() => {
+    showToast();
+  });
+}
+
+function showToast(){
+  const toast = document.getElementById("toast");
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 1500);
+}
+</script>
+
+</body>
+</html>
